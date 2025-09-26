@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Shield, Plus, Package, Image, MessageSquare, Star, Edit, Trash2 } from 'lucide-react';
+import { Shield, Plus, Package, Image, MessageSquare, Star, Edit, Trash2, Sparkles, Tag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -341,10 +341,18 @@ export const AdminPanel = () => {
         </div>
 
         <Tabs defaultValue="products" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="products" className="flex items-center gap-2">
               <Package className="h-4 w-4" />
               Produtos
+            </TabsTrigger>
+            <TabsTrigger value="news" className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4" />
+              Novidades
+            </TabsTrigger>
+            <TabsTrigger value="promotions" className="flex items-center gap-2">
+              <Tag className="h-4 w-4" />
+              Promoções
             </TabsTrigger>
             <TabsTrigger value="banners" className="flex items-center gap-2">
               <Image className="h-4 w-4" />
@@ -446,9 +454,12 @@ export const AdminPanel = () => {
                   <Input
                     id="image"
                     type="file"
-                    accept="image/*"
+                    accept="image/*,.pdf,.doc,.docx,.txt"
                     onChange={(e) => setProductImage(e.target.files?.[0] || null)}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Formatos aceitos: Imagens (JPG, PNG, etc.) e Documentos (PDF, DOC, DOCX, TXT)
+                  </p>
                 </div>
 
                 <div className="flex items-center space-x-2">
@@ -539,6 +550,113 @@ export const AdminPanel = () => {
             </Card>
           </TabsContent>
 
+          <TabsContent value="news" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Sparkles className="h-5 w-5" />
+                  Gerenciar Novidades
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">
+                  Produtos marcados como novidade aparecerão na página de Novidades.
+                </p>
+                <div className="grid gap-4">
+                  {products.map(product => (
+                    <div key={product.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex items-center gap-4">
+                        <img 
+                          src={product.imageUrl} 
+                          alt={product.name}
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
+                        <div>
+                          <h3 className="font-semibold">{product.name}</h3>
+                          <p className="text-sm text-muted-foreground">{product.category}</p>
+                          <span className="font-bold text-primary">{product.price} MZN</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {product.isNew ? (
+                          <Badge className="bg-green-500">
+                            <Star className="h-3 w-3 mr-1" />
+                            Novidade
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary">Normal</Badge>
+                        )}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => startEditProduct(product)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="promotions" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Tag className="h-5 w-5" />
+                  Gerenciar Promoções
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">
+                  Produtos com desconto aparecerão na página de Promoções.
+                </p>
+                <div className="grid gap-4">
+                  {products.map(product => (
+                    <div key={product.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div className="flex items-center gap-4">
+                        <img 
+                          src={product.imageUrl} 
+                          alt={product.name}
+                          className="w-16 h-16 object-cover rounded-lg"
+                        />
+                        <div>
+                          <h3 className="font-semibold">{product.name}</h3>
+                          <p className="text-sm text-muted-foreground">{product.category}</p>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-primary">{product.price} MZN</span>
+                            {product.discount > 0 && (
+                              <Badge variant="destructive">{product.discount}% OFF</Badge>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        {product.discount > 0 ? (
+                          <Badge variant="destructive">
+                            <Tag className="h-3 w-3 mr-1" />
+                            {product.discount}% OFF
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary">Sem desconto</Badge>
+                        )}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => startEditProduct(product)}
+                        >
+                          <Edit className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
           <TabsContent value="banners" className="space-y-6">
             <Card>
               <CardHeader>
@@ -584,9 +702,12 @@ export const AdminPanel = () => {
                   <Input
                     id="bannerImage"
                     type="file"
-                    accept="image/*"
+                    accept="image/*,.pdf,.doc,.docx,.txt"
                     onChange={(e) => setBannerImage(e.target.files?.[0] || null)}
                   />
+                  <p className="text-xs text-muted-foreground">
+                    Formatos aceitos: Imagens (JPG, PNG, etc.) e Documentos (PDF, DOC, DOCX, TXT)
+                  </p>
                 </div>
 
                 <div className="flex items-center space-x-2">
