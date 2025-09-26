@@ -56,13 +56,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const createUserData = async (firebaseUser: FirebaseUser, additionalData: any) => {
+    // Define admin based on specific email
+    const isAdminEmail = firebaseUser.email === 'mozstoredigitalp2@gmail.com';
+    
     const userData: User = {
       uid: firebaseUser.uid,
       username: additionalData.username || firebaseUser.displayName || '',
       email: firebaseUser.email || '',
       phone: additionalData.phone || '',
       createdAt: new Date(),
-      isAdmin: false
+      isAdmin: isAdminEmail
     };
 
     await setDoc(doc(db, 'users', firebaseUser.uid), userData);

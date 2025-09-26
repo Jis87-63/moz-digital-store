@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -31,15 +31,17 @@ export const AdminLogin = () => {
     return <Navigate to="/painel/admin" replace />;
   }
 
+  // Listen for changes in currentUser after login
+  useEffect(() => {
+    if (currentUser?.isAdmin) {
+      navigate('/painel/admin');
+    }
+  }, [currentUser, navigate]);
+
   const onSubmit = async (data: AdminFormData) => {
     try {
       setLoading(true);
       await login(data.email, data.password);
-      
-      // Check if user is admin after login
-      if (currentUser?.isAdmin) {
-        navigate('/painel/admin');
-      }
     } catch (error) {
       console.error('Admin login error:', error);
     } finally {
