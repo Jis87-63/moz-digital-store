@@ -22,7 +22,6 @@ import { Promotions } from "@/pages/promotions";
 import { NewProducts } from "@/pages/new-products";
 import { Support } from "@/pages/support";
 import { AdminPanel } from "@/pages/admin/admin-panel";
-import { AdminLogin } from "@/pages/admin/admin-login";
 import { Profile } from "@/pages/profile";
 import { TermsOfService } from "@/pages/legal/terms";
 import { PrivacyPolicy } from "@/pages/legal/privacy";
@@ -75,8 +74,7 @@ const App = () => (
                       <Route path="/pagamento/sucesso" element={<PaymentSuccess />} />
                       
                       {/* Admin Pages */}
-                      <Route path="/painel" element={<AdminLogin />} />
-                      <Route path="/painel/admin" element={<AdminPanel />} />
+            <Route path="/painel" element={<AdminPanel />} />
                       
                       {/* 404 Page */}
                       <Route path="*" element={<NotFound />} />
