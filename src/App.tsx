@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/auth-context";
 import { CartProvider } from "@/contexts/cart-context";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
+import { useScrollToTop } from "@/hooks/use-scroll-to-top";
 
 // Pages
 import { Landing } from "@/pages/landing";
@@ -31,6 +32,11 @@ import NotFound from "@/pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const ScrollToTopWrapper = ({ children }: { children: React.ReactNode }) => {
+  useScrollToTop();
+  return <>{children}</>;
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <ThemeProvider defaultTheme="system" storageKey="moz-store-theme">
@@ -40,43 +46,45 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <div className="min-h-screen flex flex-col">
-                <Header />
-                <main className="flex-1">
-                  <Routes>
-                    {/* Main Pages */}
-                    <Route path="/" element={<Landing />} />
-                    <Route path="/loja" element={<Store />} />
-                    <Route path="/categoria/:categoryId" element={<CategoryPage />} />
-                    <Route path="/produto/:productId" element={<ProductPage />} />
-                    <Route path="/carrinho" element={<Cart />} />
-                    <Route path="/promocoes" element={<Promotions />} />
-                    <Route path="/novidades" element={<NewProducts />} />
-                    <Route path="/suporte" element={<Support />} />
-                    <Route path="/perfil" element={<Profile />} />
-                    
-                    {/* Auth Pages */}
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/registro" element={<Register />} />
-                    
-                    {/* Legal Pages */}
-                    <Route path="/termos" element={<TermsOfService />} />
-                    <Route path="/privacidade" element={<PrivacyPolicy />} />
-                    <Route path="/licenca" element={<License />} />
-                    
-                    {/* Payment Pages */}
-                    <Route path="/pagamento/sucesso" element={<PaymentSuccess />} />
-                    
-                    {/* Admin Pages */}
-                    <Route path="/painel" element={<AdminLogin />} />
-                    <Route path="/painel/admin" element={<AdminPanel />} />
-                    
-                    {/* 404 Page */}
-                    <Route path="*" element={<NotFound />} />
-                  </Routes>
-                </main>
-                <Footer />
-              </div>
+              <ScrollToTopWrapper>
+                <div className="min-h-screen flex flex-col">
+                  <Header />
+                  <main className="flex-1">
+                    <Routes>
+                      {/* Main Pages */}
+                      <Route path="/" element={<Landing />} />
+                      <Route path="/loja" element={<Store />} />
+                      <Route path="/categoria/:categoryId" element={<CategoryPage />} />
+                      <Route path="/produto/:productId" element={<ProductPage />} />
+                      <Route path="/carrinho" element={<Cart />} />
+                      <Route path="/promocoes" element={<Promotions />} />
+                      <Route path="/novidades" element={<NewProducts />} />
+                      <Route path="/suporte" element={<Support />} />
+                      <Route path="/perfil" element={<Profile />} />
+                      
+                      {/* Auth Pages */}
+                      <Route path="/login" element={<Login />} />
+                      <Route path="/registro" element={<Register />} />
+                      
+                      {/* Legal Pages */}
+                      <Route path="/termos" element={<TermsOfService />} />
+                      <Route path="/privacidade" element={<PrivacyPolicy />} />
+                      <Route path="/licenca" element={<License />} />
+                      
+                      {/* Payment Pages */}
+                      <Route path="/pagamento/sucesso" element={<PaymentSuccess />} />
+                      
+                      {/* Admin Pages */}
+                      <Route path="/painel" element={<AdminLogin />} />
+                      <Route path="/painel/admin" element={<AdminPanel />} />
+                      
+                      {/* 404 Page */}
+                      <Route path="*" element={<NotFound />} />
+                    </Routes>
+                  </main>
+                  <Footer />
+                </div>
+              </ScrollToTopWrapper>
             </BrowserRouter>
           </TooltipProvider>
         </CartProvider>
